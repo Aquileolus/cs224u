@@ -350,8 +350,15 @@ class TorchModelBase:
         for iteration in range(1, self.max_iter+1):
 
             epoch_error = 0.0
+            
+            total_batches = len(dataloader)
 
             for batch_num, batch in enumerate(dataloader, start=1):
+                batch_progress = (batch_num / total_batches) * 100
+                utils.progress_bar(
+                    "Epoch {}/{} - Batch {}/{} ({:.2f}%)".format(
+                        iteration, self.max_iter, batch_num, total_batches, batch_progress),
+                    verbose=self.display_progress)
 
                 batch = [x.to(self.device) for x in batch]
 
